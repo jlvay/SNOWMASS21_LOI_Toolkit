@@ -1,0 +1,123 @@
+\documentclass[11pt,sort&compress]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[legalpaper, portrait, margin=1in]{geometry}
+\usepackage{authblk}
+% \usepackage{natbib}  % some latex error
+\usepackage{graphicx}
+\usepackage{epigraph}
+% \epigraphsize{\small}% Default
+\setlength\epigraphwidth{16cm}
+\setlength\epigraphrule{0pt}
+
+%\setlength{\textwidth}{6.5in}
+%\setlength{\oddsidemargin}{-0.25in}
+%\setlength{\topmargin}{0in}
+
+\title{\vspace{-0in}A modular community ecosystem for multiphysics particle accelerator modeling and design}
+\author[1]{Jean-Luc Vay\thanks{jlvay@lbl.gov}}
+\author[1]{Axel Huebl}
+\author[2]{David Sagan}
+\author[3]{David Bruhwiler}
+\author[1]{Rémi Lehe}
+\author[4]{Cho-Kuen Ng}
+\author[5]{Ao Liu}
+\author[1]{Ji Qiang}
+\author[1]{Robert Ryne}
+\author[6]{Eric Stern}
+\author[7]{Alex Friedman}
+\author[8]{Maxence Th\'evenet}
+\author[9]{Henri Vincenti}
+\author[4]{Spencer Gessner}
+\author[10]{Benjamin Cowan}
+
+
+\affil[1]{Lawrence Berkeley National Laboratory, Berkeley, CA, USA}
+\affil[2]{Cornell University, Ithaca, NY, USA}
+\affil[3]{RadiaSoft LLC, Boulder, CO, USA}
+\affil[4]{SLAC National Laboratory, Menlo Park, CA, USA}
+\affil[5]{Euclid Techlabs, Bolingbrook, IL, USA}
+\affil[6]{Fermi National Accelerator Laboratory, Batavia, IL, USA}
+\affil[7]{Lawrence Livermore National Laboratory, Livermore, CA, USA}
+\affil[8]{DESY, Hamburg, Germany}
+\affil[9]{LIDYL, CEA-Universit\'e Paris-Saclay, CEA Saclay, 91 191 Gif-sur-Yvette, France}
+\affil[10]{Tech-X Corporation, Boulder, CO, USA}
+
+% \affil[4]{University of Chicago, Chicago, IL, USA}
+% \affil[5]{DESY, Hamburg, Germany}
+% \affil[6]{Argonne National Laboratory, Lemont, IL, USA}
+% \affil[7]{University of California Los Angeles, Los Angeles, CA, USA}
+% \affil[8]{Thomas Jefferson National Accelerator Facility, Newport News, VA, USA}
+% \affil[10]{Paul Scherrer Institut, Villigen, Switzerland}
+
+
+\usepackage[sorting=none]{biblatex}
+\addbibresource{biblio.bib}
+
+% \bibliographystyle{plain} % some latex error
+\bibliography{references}
+
+\begin{document}
+
+\maketitle
+
+\pagebreak
+%-------------------------------------------------------------
+\section{Existing landscape of accelerator codes}
+
+Simulations are critical to the design, development and operation of all accelerator facilities, some costing in the billions of U.S. Dollars. 
+The simulation of all the components and physical processes that are involved is a very wide-ranging and complex endeavor.
+While a lot of efforts have been aimed at the development and maintenance of very useful and successful simulation tools, they were largely uncoordinated. 
+This resulted in a rich collection of (often relatively small, with some large and sophisticated) codes that are not interoperable, use different I/O formats and quite often duplicate some physics functionalities using the exact same underlying algorithms (e.g., many codes have standard Particle-in-Cell cores that are distinct but algorithmically identical), impoverishing the effective diversity of the whole.
+
+Accelerator and beam physics software, like many other types of software, are subject to a `natural cycle', driven by, e.g., developers retiring or moving to other projects, evolution of programming languages or computer hardware, leading to regular retirement or loss of codes that need to be rewritten from scratch. The rewriting can be particularly costly when the previous code is poorly documented (if at all) and the original developer(s) is/are not available.
+
+Another challenge accelerator physicists face is related to multiphysics integration in that most accelerator codes only implement modeling and simulation of specific processes, such as RF field calculations, particle tracking, space charge effect, and so forth. Taking RF cavity modeling as an example, part of the emitted particles in the cavity structure are accelerated to relatively high energy (MeV or higher) level and are lost on the wall. Surface impact creates secondary electrons (and cascaded activation of free electrons) and associated photon radiation. Researchers need to specify the radiation level to radiation safety personnel before the cavity can run at high power. This integration of RF modeling, particle tracking and particle-matter interaction simulation is highly desired by the community. 
+To this end, it is proposed, for example, to integrate the Geant4 libraries with the ACE3P suite (G4ACE3P). This involves solid model conversion to Geant4 formats, creating complex cavity geometries, and communication between the two environment during particle tracking.
+
+The lack of standardization of I/Os between the many codes that exist means that it is difficult to (a) build workflows that link several codes together to solve a larger problem or solve a problem with more physical processes, (b) to benchmark and validate the various codes against each other and know solutions, and (c) establishing reproducibility for new scientific results. Standards are being developed and adopted that can alleviate such issues \cite{LOI_standards}. 
+
+The next level of integration, beyond the development of standards of I/Os, would require the development of an ecosystem of software that are interoperable and whose components can be assembled into topical packages, toolkits and start-to-end workflows. This transition to a more coordinated, collaborative, community-driven, approach, is driven in part by the need to transition a large body of software from CPUs to GPUs, a transition that is more disruptive than most past transitions, including the transition from serial to parallel codes (and this will be one of many transitions needed to adopt to rapidly evolving compute hardware).
+
+%-------------------------------------------------------------
+\section{Ecosystem of modeling tools}
+
+Building on the Interoperable Design of Extreme-scale Application Software (IDEAS) project \cite{IDEAS} and its Extreme-scale Scientific Software Development Kit (xSDK) \cite{xSDK}, an ecosystem of software for the modeling of beam and particle accelerator physics can be established.
+
+The main goal of the IDEAS project is to ``help move scientific software development toward an approach of building new applications as a composition of reusable, robust, and scalable software components and libraries, using the best available practices and tools.'', while the 
+xSDK project is being developed to ``provide a coordinated infrastructure for independent mathematical libraries to support the productive and efficient development of high-quality applications'' \cite{xSDK}:
+
+\begin{quote}
+Rapid, efficient production of high-quality, sustainable extreme-scale scientific applications is best accomplished using a rich ecosystem of state-of-the art reusable libraries, tools, lightweight frameworks, and defined software methodologies, developed by a community of scientists who are striving to identify, adapt, and adopt best practices in software engineering. The vision of the xSDK is to provide infrastructure for and interoperability of a collection of related and complementary software elements—developed by diverse, independent teams throughout the high-performance computing (HPC) community—that provide the building blocks, tools, models, processes, and related artifacts for rapid and efficient development of high-quality applications.
+\end{quote}
+
+Although xSDK targets ``extreme-scale scientific applications'' of relevance to exascale supercomputing, its derived community policies apply well to all scales of computing, from laptops to clusters.  Hence, the paradigm and tools are readily applicable to the full set of modeling needs of the particle accelerator community.
+
+Individual packages in such an ecosystem are composable libraries, frameworks, and domain components developed by individual groups in the community.
+Each package publishes technical design documents, documentation (reference, tutorials, how-to guides), API definitions, and a concrete implementation \cite{LOI_industry}.  In order to solve a specific physics case, a typical application uses functionalities from several packages, often in an innovative way.  Community policies that have been established over years by teams of specialists in scientific software development and computing, and include best practices in software development.
+
+\section{Outlook}
+
+Based on experiences with the IDEAS and xSDK projects, we recommend that the following be considered in adopting policies and tools for software development efforts:
+\begin{itemize}
+    \item A wide-ranging set of open source, interoperable tools from a variety of backgrounds (including numerical solvers, e.g., Hypre, multi-parameter optimizer, e.g. LibEnsemble, and mesh-refinement frameworks, e.g. AMReX) can be combined and used as foundation of accelerator and beam physics toolkits and codes.
+    \item Partial overlap in functionality is not problematic and in fact improves the diversity of the whole.
+    \item Portability across platforms (CPUs, GPUs, etc.) of low-level libraries ensures portability of the software that is built upon them.  Building on low-level libraries in new tools greatly reduces the overall burden on the community for porting codes to new platforms.
+    \item A wide community of developers that can help across projects improves software capability and sustainability.
+    \item Time of development and maintenance of domain specific software is greatly reduced, as the domain scientists can concentrate on the domain-specific functionalities while lower-level, cross-cutting, numerical packages are maintained by dedicated specialists.
+    \item Since packages are reused across software and duplication is minimized, bugs and inefficiencies are spotted earlier.
+    \item Domain-specific packages that follow established policies are portable across platforms and interoperable, and can thus be combined to form larger toolkits and codes.
+    \item Developer engagement is maximized if codes developed in these efforts that are open source are licensed permissively.  This includes allowing reuse of source and binary code for both commercial and non-commercial applications.
+    % add example of Poisson, PIC library
+\end{itemize}
+
+Many codes, libraries and packages exist in the community that can be reused as building blocks, and progressively modernized and blended in a module that is portable and runs efficiently on modern CPUs and GPUs. Hence, not all functionalities have to be rewritten from scratch at once, offering a progressive path from the current status to an ecosystem of accelerator modeling tools. 
+
+It is to be emphasized that the goal is not to propose that only one code be developed to study, e.g., RF accelerators or plasma-based accelerators. It is not also to channel support to a particular team or collaboration. 
+The goal is, on the contrary, to provide a coordinated infrastructure that enables inclusive and collaborative development of modeling tools for the community, and for these tools, to follow modern practices for scientific software, be portable, efficient, robust and leading to consistently accurate and reproducible results.
+This will also level the playing fields for new researchers (U.S. or international) who can then easily contribute their new ideas and have them available for use, testing and further improvements by the entire community.
+
+The development of a modular ecosystem of accelerator and beam modeling tools will enable the modeling capabilities of the community to reach another level of breadth and depth. The libraries (e.g., Poisson solvers library \cite{LOI_Poisson}), toolkits (e.g., beam dynamics toolkit \cite{LOI_toolkit}) and codes (e.g., for electron cooling \cite{LOI_ECool} or plasma accelerators \cite{LOI_PlasmaAcc}) that will be developed as part of the ecosystem can be further combined with standardized workflows \cite{LOI_standards}, augmented with machine learning and surrogate models \cite{LOI_ML}, to enable End-to-end Virtual Accelerators (EVA) \cite{LOI_EVA}. Center(s) dedicated to accelerator and beam modeling \cite{LOI_Center} (including accelerator and beam physicist collaborating with applied mathematicians, computer scientists and software engineers), coordinated in consortia (such as, e.g., CAMPA \cite{CAMPA}), would be especially well fitted for the development and maintenance of such ecosystem of accelerator and beam modeling tools. 
+\pagebreak
+
+\printbibliography
+\end{document}
